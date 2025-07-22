@@ -1,32 +1,36 @@
+// src/utils/cloudinary.js
+
 import { v2 as cloudinary } from 'cloudinary';
-import {fs} from 'fs';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
+dotenv.config();  // Load environment variables
 
-    // Configuration
-    cloudinary.config({ 
-        cloud_name: 'process.env.CLOUDINARY_CLOUD_NAME', // Click 'View API Keys' above to copy your cloud namePRO
-        api_key: 'process.env.CLOUDINARY_CLOUD_KEY', // Click 'View API Keys' above to copy your API key
-        api_secret: 'process.env.CLOUDINARY_API_SECRET' // Click 'View API Keys' above to copy your API secret
-    });
+// Cloudinary configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_CLOUD_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-const uploadonCloudinary = async (localFilePath) => {
-
-    try{
+const uploadOnCloudinary = async (localFilePath) => {
+    try {
         if (!localFilePath) return null;
-        // upload the file on cloudnary 
-        const response = await cloudinary.uploader.upload(localFilePath, {resource_type: 'auto'});
 
-        // file has been uploaded to Cloudinary successfully
+        // Upload the file to Cloudinary
+        const response = await cloudinary.uploader.upload(localFilePath, { resource_type: 'auto' });
+
+        // File uploaded successfully
         console.log("File uploaded successfully:", response.url);
         return response;
+    } catch (error) {
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath); // Delete local file if upload fails
+        }
 
-    }catch (error) {
-        fs.unlinkSync(localFilePath); // Delete the local file if upload fails
-        console.error("Error uploading to Cloudinary:", error); 
-        return null; // Return null if upload fails
-        throw error;
+        console.error("Error uploading to Cloudinary:", error);
+        return null;
     }
-}
+};
 
-
-export {uploadonCloudinary}
+export { uploadOnCloudinary };  // Ensure proper export

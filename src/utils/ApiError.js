@@ -1,21 +1,21 @@
-class ApiError extends Error {
+// src/utils/ApiError.js
+
+export class ApiError extends Error {
     constructor(
         statusCode,
-        message = "somthing went wrong",
+        message = "Something went wrong",
         errors = [],
         stack = ""
-    ) 
-        {
+    ) {
         super(message);
         this.statusCode = statusCode;
-        this.data =null
-        this.massage = message;
+        this.message = message; // Fixed typo here (was 'massage')
         this.success = false;
         this.errors = errors;
-
+        
         if (stack) {
             this.stack = stack;
-        }else {
+        } else {
             Error.captureStackTrace(this, this.constructor);
         }
     }
