@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';   // Import mongoose as the default export
-const { Schema } = mongoose;      // Extract Schema from mongoose
-import jwt from 'jsonwebtoken';
+import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema({
     username: {
@@ -33,7 +32,7 @@ const userSchema = new Schema({
     },
     watchHistory: [{
         type: Schema.Types.ObjectId,
-        ref: 'videos',  // Ensure 'videos' collection exists in the database
+        ref: 'Video',  // Ensure 'videos' collection exists in the database
     }],
     password: {
         type: String,
@@ -83,7 +82,7 @@ userSchema.methods.generateRefreshToken = function () {
         },
         process.env.REFERER_TOKEN_SECRET,
         {
-            expiresIn: process.env.REFERER_TOKEN_EXPIRY || '1d',
+            expiresIn: process.env.REFERER_TOKEN_EXPIRY || '7d',
         }
     );
 };

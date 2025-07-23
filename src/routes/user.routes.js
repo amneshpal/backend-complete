@@ -1,24 +1,13 @@
+// src/routes/user.routes.js
+
 import { Router } from 'express';
-import { registerUser } from '../controllers/user.contoller.js';  // Import registerUser function
-import {upload} from '../middlewares/multer.middleware.js';  // Import upload if needed
-
-
+import { registerUser } from '../controllers/user.contoller.js';  // Ensure correct relative path
+import { upload } from '../middlewares/multer.middleware.js';  // Import upload middleware
 
 const router = Router();
 
 router.route('/register').post(
-    upload.fields([
-        {
-        name : "avatar",
-        maxCount: 1  // Limit to one file for avatar
-        },
-        {
-        name : "cover",
-        maxCount: 1  // Limit to one file for cover image
-
-        }
-
-    ]),  // Use upload if you need to handle file uploads
-    registerUser);  // Use registerUser function, not the filename
-
+    upload,
+    registerUser
+);
 export default router;
